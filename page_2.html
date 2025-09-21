@@ -1,0 +1,305 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Trip Details &amp; Cost Breakdown</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 100vw; height: 100vh; overflow: hidden; margin: 0;
+            padding: 0;}
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: linear-gradient(135deg, #e6f7ff 0%, #f0f8ff 100%);
+            
+        }
+        .snowflake {
+            position: absolute;
+            color: white;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+            }
+            100% {
+                transform: translateY(720px) rotate(360deg);
+            }
+        }
+        .title-bar {
+            background-color: rgba(59, 130, 246, 0.8);
+            padding: 15px 30px;
+            border-radius: 0 0 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .content-box {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        .cost-item {
+            transition: all 0.3s ease;
+        }
+        .cost-item:hover {
+            transform: translateX(5px);
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.absolute{position:absolute}.inset-0{inset:0px}.left-0{left:0px}.top-0{top:0px}.mb-4{margin-bottom:1rem}.mb-3{margin-bottom:0.75rem}.mr-2{margin-right:0.5rem}.mt-4{margin-top:1rem}.ml-auto{margin-left:auto}.mr-3{margin-right:0.75rem}.flex{display:flex}.h-64{height:16rem}.h-full{height:100%}.h-48{height:12rem}.w-full{width:100%}.w-1\/2{width:50%}.w-3\/5{width:60%}.w-2\/5{width:40%}.flex-grow{flex-grow:1}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.border-t-2{border-top-width:2px}.border-b{border-bottom-width:1px}.border-blue-300{--tw-border-opacity:1;border-color:rgb(147 197 253 / var(--tw-border-opacity, 1))}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.from-blue-50{--tw-gradient-from:#eff6ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(239 246 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-blue-100{--tw-gradient-to:#dbeafe var(--tw-gradient-to-position)}.p-8{padding:2rem}.p-5{padding:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.pt-24{padding-top:6rem}.pr-4{padding-right:1rem}.pb-3{padding-bottom:0.75rem}.pl-4{padding-left:1rem}.text-center{text-align:center}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-2xl{font-size:1.5rem;line-height:2rem}.text-5xl{font-size:3rem;line-height:1}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.font-bold{font-weight:700}.italic{font-style:italic}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-blue-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-green-500{--tw-text-opacity:1;color:rgb(34 197 94 / var(--tw-text-opacity, 1))}.text-orange-500{--tw-text-opacity:1;color:rgb(249 115 22 / var(--tw-text-opacity, 1))}.text-purple-500{--tw-text-opacity:1;color:rgb(168 85 247 / var(--tw-text-opacity, 1))}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.text-red-500{--tw-text-opacity:1;color:rgb(239 68 68 / var(--tw-text-opacity, 1))}</style><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.absolute{position:absolute}.inset-0{inset:0px}.left-0{left:0px}.top-0{top:0px}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.ml-auto{margin-left:auto}.mr-2{margin-right:0.5rem}.mr-3{margin-right:0.75rem}.mt-4{margin-top:1rem}.flex{display:flex}.h-48{height:12rem}.h-64{height:16rem}.h-full{height:100%}.w-1\/2{width:50%}.w-2\/5{width:40%}.w-3\/5{width:60%}.w-full{width:100%}.flex-grow{flex-grow:1}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.border-b{border-bottom-width:1px}.border-t-2{border-top-width:2px}.border-blue-300{--tw-border-opacity:1;border-color:rgb(147 197 253 / var(--tw-border-opacity, 1))}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.from-blue-50{--tw-gradient-from:#eff6ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(239 246 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-blue-100{--tw-gradient-to:#dbeafe var(--tw-gradient-to-position)}.p-5{padding:1.25rem}.p-8{padding:2rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.pb-3{padding-bottom:0.75rem}.pl-4{padding-left:1rem}.pr-4{padding-right:1rem}.pt-24{padding-top:6rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.italic{font-style:italic}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-blue-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-green-500{--tw-text-opacity:1;color:rgb(34 197 94 / var(--tw-text-opacity, 1))}.text-orange-500{--tw-text-opacity:1;color:rgb(249 115 22 / var(--tw-text-opacity, 1))}.text-purple-500{--tw-text-opacity:1;color:rgb(168 85 247 / var(--tw-text-opacity, 1))}.text-red-500{--tw-text-opacity:1;color:rgb(239 68 68 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}</style></head>
+<body class="">
+<div class="slide bg-gradient-to-br from-blue-50 to-blue-100" style=" overflow: hidden;">
+<!-- Animated Snowflakes -->
+<div class="snowflake text-4xl" style="left: 10%; top: 20%; animation-duration: 15s;">
+<i class="fas fa-snowflake"></i>
+</div>
+<div class="snowflake text-3xl" style="left: 30%; top: -5%; animation-duration: 12s;">
+<i class="fas fa-snowflake"></i>
+</div>
+<div class="snowflake text-2xl" style="left: 60%; top: 15%; animation-duration: 18s;">
+<i class="fas fa-snowflake"></i>
+</div>
+<div class="snowflake text-5xl" style="left: 80%; top: 5%; animation-duration: 20s;">
+<i class="fas fa-snowflake"></i>
+</div>
+<div class="snowflake text-3xl" style="left: 20%; top: -10%; animation-duration: 14s;">
+<i class="fas fa-snowflake"></i>
+</div>
+<div class="snowflake text-4xl" style="left: 70%; top: 10%; animation-duration: 16s;">
+<i class="fas fa-snowflake"></i>
+</div>
+<!-- Title Bar -->
+<div class="title-bar absolute top-0 left-0 w-full">
+<h1 class="text-3xl font-bold text-white">Trip Details &amp; Cost Breakdown</h1>
+</div>
+<!-- Main Content -->
+<div class="absolute inset-0 flex p-8 pt-24">
+<!-- Left Column - Attendance &amp; Dates -->
+<div class="w-1/2 pr-4 flex flex-col">
+<!-- Attendance Section -->
+<div class="content-box p-5 mb-4 flex-grow">
+<h2 class="text-2xl font-bold text-blue-700 mb-3 flex items-center">
+<i class="fas fa-users mr-2"></i> Attendance Probability
+                    </h2>
+<div class="w-full h-64" id="attendance-chart"></div>
+</div>
+<!-- Trip Dates -->
+<div class="content-box p-5">
+<h2 class="text-2xl font-bold text-blue-700 mb-3 flex items-center">
+<i class="far fa-calendar-alt mr-2"></i> Trip Dates
+                    </h2>
+<div class="flex items-center justify-center">
+<div class="text-center px-6">
+<p class="text-lg font-bold">June 30, 2026</p>
+<p class="text-gray-600">Departure</p>
+</div>
+<div class="flex-grow flex items-center justify-center">
+<div class="border-t-2 border-blue-300 w-full"></div>
+</div>
+<div class="text-center px-6">
+<p class="text-lg font-bold">July 7, 2026</p>
+<p class="text-gray-600">Return</p>
+</div>
+</div>
+<div class="mt-4 text-center">
+<p class="text-xl font-bold text-blue-600">Total: 8 Nights</p>
+</div>
+</div>
+</div>
+<!-- Right Column - Cost Breakdown -->
+<div class="w-1/2 pl-4">
+<div class="content-box p-5 h-full">
+<h2 class="text-2xl font-bold text-blue-700 mb-3 flex items-center">
+<i class="fas fa-dollar-sign mr-2"></i> Cost Breakdown
+                    </h2>
+<div class="flex">
+<!-- Cost Items List -->
+<div class="w-3/5">
+<div class="cost-item flex items-center mb-3 pb-3 border-b border-gray-200">
+<i class="fas fa-skiing text-orange-500 text-xl mr-3"></i>
+<div>
+<p class="font-bold">Ski-pass</p>
+<p class="text-gray-700">1,045 AUD</p>
+</div>
+<div class="ml-auto font-bold text-blue-600">38.7%</div>
+</div>
+<div class="cost-item flex items-center mb-3 pb-3 border-b border-gray-200">
+<i class="fas fa-bus text-green-500 text-xl mr-3"></i>
+<div>
+<p class="font-bold">Transportation</p>
+<p class="text-gray-700">179 AUD</p>
+</div>
+<div class="ml-auto font-bold text-blue-600">6.6%</div>
+</div>
+<div class="cost-item flex items-center mb-3 pb-3 border-b border-gray-200">
+<i class="fas fa-skiing-nordic text-purple-500 text-xl mr-3"></i>
+<div>
+<p class="font-bold">Rentals</p>
+<p class="text-gray-700">195 AUD</p>
+</div>
+<div class="ml-auto font-bold text-blue-600">7.2%</div>
+</div>
+<div class="cost-item flex items-center mb-3 pb-3 border-b border-gray-200">
+<i class="fas fa-home text-blue-500 text-xl mr-3"></i>
+<div>
+<p class="font-bold">Accommodation</p>
+<p class="text-gray-700" data-sk-edited="">1,000-1,500 AUD</p>
+</div>
+<div class="ml-auto font-bold text-blue-600">37.0-48.1%</div>
+</div>
+<div class="cost-item flex items-center mb-3 pb-3 border-b border-gray-200">
+<i class="fas fa-tshirt text-red-500 text-xl mr-3"></i>
+<div>
+<p class="font-bold">Clothing &amp; Gear</p>
+<p class="text-gray-700">300 AUD</p>
+</div>
+<div class="ml-auto font-bold text-blue-600">11.1%</div>
+</div>
+</div>
+<!-- Cost Chart -->
+<div class="w-2/5 flex flex-col items-center justify-center">
+<div class="w-full h-48" id="cost-chart"></div>
+<div class="mt-4 text-center">
+<p class="text-xl font-bold text-blue-700" data-sk-edited="">Total: ~2,800 AUD</p>
+<p class="text-gray-600">Per Person</p>
+</div>
+</div>
+</div>
+<div class="mt-4 text-sm text-gray-600 italic">
+<p>Notes: Price does not include lessons, food, or beverages. Lessons are anticipated to be a minor additional cost if required.</p>
+</div>
+</div>
+</div>
+</div>
+<script>
+        // Attendance Chart
+        const attendanceData = [
+            {name: "Iden", probability: 101},
+            {name: "Jorvan", probability: 70},
+            {name: "Siew", probability: 70},
+            {name: "Timmy", probability: 50},
+            {name: "Jocelyn", probability: 70},
+            {name: "Kelly", probability: 50},
+            {name: "Jackson", probability: 100}
+        ];
+
+        const attendanceChart = d3.select("#attendance-chart");
+        const attendanceWidth = attendanceChart.node().getBoundingClientRect().width;
+        const attendanceHeight = attendanceChart.node().getBoundingClientRect().height;
+        const attendanceMargin = {top: 10, right: 20, bottom: 30, left: 80};
+        const attendanceInnerWidth = attendanceWidth - attendanceMargin.left - attendanceMargin.right;
+        const attendanceInnerHeight = attendanceHeight - attendanceMargin.top - attendanceMargin.bottom;
+
+        const attendanceSvg = attendanceChart.append("svg")
+            .attr("width", attendanceWidth)
+            .attr("height", attendanceHeight);
+
+        const attendanceG = attendanceSvg.append("g")
+            .attr("transform", `translate(${attendanceMargin.left},${attendanceMargin.top})`);
+
+        const attendanceX = d3.scaleLinear()
+            .domain([0, 100])
+            .range([0, attendanceInnerWidth]);
+
+        const attendanceY = d3.scaleBand()
+            .domain(attendanceData.map(d => d.name))
+            .range([0, attendanceInnerHeight])
+            .padding(0.2);
+
+        attendanceG.append("g")
+            .attr("transform", `translate(0,${attendanceInnerHeight})`)
+            .call(d3.axisBottom(attendanceX).ticks(5).tickFormat(d => d + "%"))
+            .selectAll("text")
+            .attr("font-size", "10px");
+
+        attendanceG.append("g")
+            .call(d3.axisLeft(attendanceY))
+            .selectAll("text")
+            .attr("font-size", "10px");
+
+        attendanceG.selectAll(".bar")
+            .data(attendanceData)
+            .enter()
+            .append("rect")
+            .attr("class", "bar")
+            .attr("y", d => attendanceY(d.name))
+            .attr("height", attendanceY.bandwidth())
+            .attr("x", 0)
+            .attr("width", 0)
+            .attr("fill", d => {
+                if (d.probability === 101) return "#10B981"; // green
+                if (d.probability >= 70) return "#3B82F6"; // blue
+                return "#F59E0B"; // yellow/orange
+            })
+            .transition()
+            .duration(800)
+            .attr("width", d => attendanceX(d.probability));
+
+        attendanceG.selectAll(".label")
+            .data(attendanceData)
+            .enter()
+            .append("text")
+            .attr("class", "label")
+            .attr("y", d => attendanceY(d.name) + attendanceY.bandwidth() / 2 + 4)
+            .attr("x", d => attendanceX(d.probability) + 5)
+            .attr("text-anchor", "start")
+            .attr("font-size", "10px")
+            .attr("fill", "#333")
+            .text(d => d.probability + "%");
+
+        // Cost Chart (Donut Chart)
+        const costData = [
+            {category: "Ski-pass", value: 1045, color: "#F97316"},
+            {category: "Transportation", value: 179, color: "#22C55E"},
+            {category: "Rentals", value: 195, color: "#A855F7"},
+            {category: "Accommodation", value: 1150, color: "#3B82F6"}, // Average of 1000-1300
+            {category: "Clothing & Gear", value: 300, color: "#EF4444"}
+        ];
+
+        const costChart = d3.select("#cost-chart");
+        const costWidth = costChart.node().getBoundingClientRect().width;
+        const costHeight = costChart.node().getBoundingClientRect().height;
+        const costRadius = Math.min(costWidth, costHeight) / 2 - 10;
+
+        const costSvg = costChart.append("svg")
+            .attr("width", costWidth)
+            .attr("height", costHeight);
+
+        const costG = costSvg.append("g")
+            .attr("transform", `translate(${costWidth / 2},${costHeight / 2})`);
+
+        const costPie = d3.pie()
+            .value(d => d.value)
+            .sort(null);
+
+        const costArc = d3.arc()
+            .innerRadius(costRadius * 0.6)
+            .outerRadius(costRadius);
+
+        const costArcs = costG.selectAll(".arc")
+            .data(costPie(costData))
+            .enter()
+            .append("g")
+            .attr("class", "arc");
+
+        costArcs.append("path")
+            .attr("d", costArc)
+            .attr("fill", d => d.data.color)
+            .attr("stroke", "white")
+            .attr("stroke-width", 2);
+
+        costG.append("text")
+            .attr("text-anchor", "middle")
+            .attr("dy", "0.3em")
+            .attr("font-size", "14px")
+            .attr("font-weight", "bold")
+            .attr("fill", "#1E40AF")
+            .text("2,700 AUD");
+    </script>
+</div>
+
+</body></html>

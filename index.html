@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slides</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        #slide-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            transition: opacity 0.1s ease-in-out;
+        }
+        #event-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            /* Transparent layer to capture events */
+            background-color: rgba(0,0,0,0); 
+        }
+    </style>
+</head>
+<body>
+    <div id="event-overlay"></div>
+    <div id="slide-container">
+        <iframe id="content-frame" src=""></iframe>
+    </div>
+
+    <script>
+        const pages = [
+            'page_1.html',
+            'page_2.html',
+            'page_3.html',
+            'page_4.html',
+            'page_5.html',
+            'page_6.html'
+        ];
+        let currentPageIndex = 0;
+
+        const contentFrame = document.getElementById('content-frame');
+
+        function showPage(index) {
+            if (index >= 0 && index < pages.length) {
+                contentFrame.style.opacity = 0; // Start fade-out
+                setTimeout(() => {
+                    contentFrame.src = `${pages[index]}?_=${new Date().getTime()}`;
+                    currentPageIndex = index;
+                }, 100); // This duration should match the CSS transition time
+            }
+        }
+
+        function prev() {
+            showPage(currentPageIndex - 1);
+        }
+
+        function next() {
+            showPage(currentPageIndex + 1);
+        }
+
+        function handleKeyDown(event) {
+            if (event.key === 'ArrowRight' || event.code === 'Space') {
+                next();
+            } else if (event.key === 'ArrowLeft') {
+                prev();
+            }
+        }
+
+        // Attach listeners
+        document.addEventListener('keydown', handleKeyDown);
+        document.getElementById('event-overlay').addEventListener('click', next);
+
+        // Fade in the new slide once it's loaded
+        contentFrame.onload = () => {
+            contentFrame.style.opacity = 1;
+        };
+
+        // Initial page load
+        window.onload = () => {
+            const password = prompt("Please enter the password to view this presentation:");
+            if (password === "qwerty1234") {
+                showPage(0);
+            } else {
+                alert("Incorrect password. Access denied.");
+                document.body.innerHTML = '<h1 style="text-align: center; margin-top: 50px;">Access Denied</h1>';
+            }
+        };
+    </script>
+</body>
+</html>
